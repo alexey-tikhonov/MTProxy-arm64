@@ -34,6 +34,12 @@ static __inline__ unsigned long long rdtsc(void) {
   __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
   return ( (unsigned long long)lo)|( ((unsigned long long)hi)<<32 );
 }
+#elif defined(__aarch64__) || defined(_M_ARM64)
+static __inline__ unsigned long long rdtsc(void) {
+    unsigned long long val;
+    asm volatile("mrs %0, cntvct_el0" : "=r"(val));
+    return val;
+}
 #else
 static __inline__ unsigned long long rdtsc(void) {
   return 0;
