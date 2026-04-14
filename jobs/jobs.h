@@ -28,7 +28,6 @@
 #include "net/net-events.h"
 #include "net/net-msg.h"
 #include "net/net-timers.h"
-#include "common/randr_compat.h"
 
 #define __joblocked
 #define __jobref
@@ -222,7 +221,7 @@ struct job_class {
 struct job_thread {
   pthread_t pthread_id;
   int id;
-  int thread_class; 
+  int thread_class;
   int job_class_mask;  // job classes allowed to run in this thread
   int status;  // 0 = absent; +1 = created, +2 = running/waiting, +4 = performing job
   long long jobs_performed;
@@ -240,12 +239,12 @@ struct job_thread {
 } __attribute__((aligned(128)));
 
 struct job_message {
-  unsigned int type;  
+  unsigned int type;
   unsigned int flags;
   unsigned int payload_ints;
   job_t src;
   void (*destructor)(struct job_message *M);
-  struct raw_message message;   
+  struct raw_message message;
   struct job_message *next;
   unsigned int payload[0];
 };
@@ -373,9 +372,9 @@ void job_message_send_fake (JOB_REF_ARG (job), int (*receive_message)(job_t job,
 static inline void job_message_send_empty (JOB_REF_ARG (job), JOB_REF_ARG (src), unsigned int type, unsigned int flags) {
   job_message_send (JOB_REF_PASS (job), JOB_REF_PASS (src), type, &empty_rwm, 1, 0, NULL, flags, NULL);
 }
-    
+
 #define TL_TRUE 0x3fedd339
-static inline int job_message_answer_true (struct job_message *M) {    
+static inline int job_message_answer_true (struct job_message *M) {
   if (M->src) {
     job_message_send (JOB_REF_PASS (M->src), JOB_REF_NULL, TL_TRUE, &empty_rwm, 1, M->payload_ints, M->payload, JMC_EXTRACT_ANSWER (M->flags), NULL);
   }
@@ -449,7 +448,7 @@ extern struct job_thread JobThreads[];
 
 #define MODULE_STAT_FUNCTION_END \
   sb_printf (sb, "<<<<<<%s<<<<<<\tend\n", MODULE_STR(MODULE)); \
-  return sb->pos; } 
+  return sb->pos; }
 
 #define MODULE_INIT \
   MODULE_STAT_TYPE *MODULE_STAT_ARR[MAX_JOB_THREADS]; \

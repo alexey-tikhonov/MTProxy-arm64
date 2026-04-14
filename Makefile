@@ -8,9 +8,9 @@ ARCH = -march=armv8-a
 
 SSL_STATIC_PATH = /usr/local/openssl-static
 
-CFLAGS = $(ARCH) -O3 -std=gnu11 -Wall -Wno-array-bounds -fno-strict-aliasing -fno-strict-overflow -fwrapv -DAES=1 -DCOMMIT=\"${COMMIT}\" -D_GNU_SOURCE=1 -D_FILE_OFFSET_BITS=64 -I$(SSL_STATIC_PATH)/includeCFLAGS = $(ARCH) -O3 -std=gnu11 -Wall -fno-strict-aliasing -fno-strict-overflow -fwrapv -DAES=1 -DCOMMIT=\"${COMMIT}\" -D_GNU_SOURCE=1 -D_FILE_OFFSET_BITS=64 -I$(SSL_STATIC_PATH)/include
+CFLAGS = $(ARCH) -O3 -std=gnu11 -Wall -Wno-array-bounds -fno-strict-aliasing -fno-strict-overflow -fwrapv -DAES=1 -DCOMMIT=\"${COMMIT}\" -D_GNU_SOURCE=1 -D_FILE_OFFSET_BITS=64
 
-LDFLAGS = $(ARCH) -static -ggdb -lm -lrt -lz -lpthread -L$(SSL_STATIC_PATH)/lib -lcrypto -lssl -ldl -latomic
+LDFLAGS = $(ARCH) -rdynamic -ggdb -lm -lrt -lz -lpthread -L$(SSL_STATIC_PATH)/lib -lcrypto -lssl -ldl -latomic
 
 LIB = ${OBJ}/lib
 CINCLUDE = -iquote common -iquote .
@@ -33,7 +33,6 @@ OBJECTS	=	\
 DEPENDENCE_NORM	:=	$(subst ${OBJ}/,${DEP}/,$(patsubst %.o,%.d,${OBJECTS}))
 
 LIB_OBJS_NORMAL := \
-	${OBJ}/common/randr_compat.o \
 	${OBJ}/common/crc32c.o \
 	${OBJ}/common/pid.o \
 	${OBJ}/common/sha1.o \
