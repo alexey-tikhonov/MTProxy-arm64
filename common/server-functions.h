@@ -106,13 +106,15 @@ void add_builtin_parse_options (void);
 typedef void (*extra_debug_handler_t)(void);
 extern extra_debug_handler_t extra_debug_handler;
 
-static inline void barrier (void) {  
+static inline void barrier (void) {
   asm volatile("": : :"memory");
 }
 
 static inline void mfence (void) {
 #if defined(__x86_64__) || defined(__i386__)
   asm volatile ("mfence": : :"memory");
+#elif defined(__aarch64__) || defined(_M_ARM64)
+  __sync_synchronize();
 #endif
 }
 
